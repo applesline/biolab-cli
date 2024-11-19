@@ -1,4 +1,3 @@
-import os
 import json
 from config import check
 from request import post

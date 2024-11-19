@@ -10,6 +10,18 @@ route_dict = {
   "workflow": {
     "create": "/workflow/create",
     "list": "/workflow/list"
+  },
+  "script": {
+    "create": "/script/create",
+    "list": "/script/list"
+  },
+  "env": {
+    "create": "/env/create",
+    "list": "/env/list"
+  },
+  "config": {
+    "create": "/config/create",
+    "list": "/config/list"
   }
 }
 
@@ -22,5 +34,5 @@ def post(module, method, data):
     url += route_dict[module][method]
     # print("[Biolab] ", url, data)
     response = requests.request("POST", url, data=data, headers=headers)
-    # print(response)
+    # print(response.json())
     return response.json()['data'];
