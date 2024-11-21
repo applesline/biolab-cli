@@ -8,21 +8,29 @@ def create_workflow(workflowname, workflowcode, step, preStep):
             "workflowName" : workflowname,
             "workflowCode" : workflowcode,
             "step" : step,
-            "preStep" : json.dumps(preStep)
+            "preStep" : json.dumps(list(preStep))
         };
-        count = post("workflow", "create", json.dumps(data))
-        if count == 0:
-            print("[Biolab] Workflow ["+workflowname+"]["+workflowcode+"_"+ step+"] already registered")
+        response = post("workflow", "create", json.dumps(data))
+        if not response:
+            return
+        if response["code"] == 0:
+            print("[Biolab] Workflow " + workflowname + "#" + workflowcode + "_" + step + " registered successful !")
         else:
-            print("[Biolab] Workflow [" + workflowname + "][" + workflowcode + "_" + step + "] registered successful !")
+            print("[Biolab] Workflow " + workflowname + "#" + workflowcode + "_" + step + " already registered")
+
 
 
 def list_workflow(workflowcode):
     if check():
-        data = [workflowcode];
+        data = [workflowcode]
         if not workflowcode:
             data = []
         # print(list(unique_no))
-        workflows = post("workflow", "list", json.dumps(data))
-        for workflow in workflows:
+        response = post("workflow", "list", json.dumps(data))
+        if not response:
+            return
+        if not response['data']:
+            print("No workflow configured")
+            return
+        for workflow in response["data"]:
             print(workflow)

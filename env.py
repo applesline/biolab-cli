@@ -11,11 +11,13 @@ def create_env(workflowcode, step, type, key, feature):
             "key" : key,
             "feature" : feature
         };
-        count = post("env", "create", json.dumps(data))
-        if count == 0:
-            print("[Biolab] The env ["+workflowcode+"_"+ step+"_"+type+"]#["+key+"] already registered")
+        response = post("env", "create", json.dumps(data))
+        if not response:
+            return
+        if response['code'] == 0:
+            print("[Biolab] The env " + workflowcode + "_" + step + "_" + type + "#" + key + " registered successful")
         else:
-            print("[Biolab] The env ["+workflowcode+"_"+ step+"_"+type+"]#["+key+"]  registered successful !")
+            print("[Biolab] The env " + workflowcode + "_" + step + "_" + type + "#" + key + " already registered")
 
 
 def list_env(workflowcode, step):
@@ -24,6 +26,11 @@ def list_env(workflowcode, step):
             "workflowCode" : workflowcode,
             "step" : step
         };
-        envs = post("env", "list", json.dumps(data))
-        for env in envs:
+        response = post("env", "list", json.dumps(data))
+        if not response:
+            return
+        if not response['data']:
+            print("No envs added")
+            return
+        for env in response['data']:
             print(env)

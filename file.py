@@ -20,23 +20,28 @@ def create_file(basedir):
                         if item['sampleNo'] == sample_no and item['uniqueNo'] == unique_no:
                             item['address'].append(file_path)
                             file_address = item['address']
-                            item['address'] = json.dumps(file_address);
+                            item['address'] = json.dumps(file_address)
                             found = True
                             break
                     if not found:
                         data.append({'batchNo':batchNo,'sampleNo': sample_no, 'uniqueNo': unique_no,'type':'rawdata', 'address': [file_path]})
 
         # print(data)
-        count = post("fileIndex", "createAll", json.dumps(data))
-        if count == 0:
-            print("[Biolab] Files ", file_address, "already registered")
-        else:
-            print("[Biolab] Files ", file_address, " register successful")
+        response = post("fileIndex", "createAll", json.dumps(data))
+        if not response:
+            return
+        if response['code'] == 0:
+            print("[Biolab] Total", len(data) , "samples register successful")
 
 
 def list_file(uniqueno):
     if check():
         # print(list(unique_no))
-        files = post("fileIndex", "list", json.dumps(uniqueno))
-        for file in files:
+        response = post("fileIndex", "list", json.dumps(uniqueno))
+        if not response:
+            return
+        if not response['data']:
+            print("No files added")
+            return
+        for file in response['data']:
             print(file)

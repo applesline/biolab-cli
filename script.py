@@ -9,12 +9,14 @@ def create_script(workflowcode, step, type, script):
             "step" : step,
             "type" : type,
             "script" : script
-        };
-        count = post("script", "create", json.dumps(data))
-        if count == 0:
-            print("[Biolab] Script ["+script+"]["+workflowcode+"_"+ step+"] already registered")
+        }
+        response = post("script", "create", json.dumps(data))
+        if not response:
+            return
+        if response["code"] == 0:
+            print("[Biolab] Script " + workflowcode + "_" + step + "#"  + script  + " registered successful")
         else:
-            print("[Biolab] Script [" + script + "][" + workflowcode + "_" + step + "] registered successful !")
+            print("[Biolab] Script " + workflowcode + "_" + step + "#"  + script  + " already registered")
 
 
 def list_script(workflowcode):
@@ -22,6 +24,11 @@ def list_script(workflowcode):
         data = [workflowcode];
         if not workflowcode:
             data = []
-        scripts = post("script", "list", json.dumps(data))
-        for script in scripts:
+        response = post("script", "list", json.dumps(data))
+        if not response:
+            return
+        if not response['data']:
+            print("No scripts configured")
+            return
+        for script in response['data']:
             print(script)

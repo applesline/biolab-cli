@@ -9,16 +9,23 @@ def create_config(type, key, value):
             "key" : key,
             "value" : value
         };
-        count = post("config", "create", json.dumps(data))
-        if count == 0:
-            print("[Biolab] The config ["+type+"_"+ key+"] already registered")
+        response = post("config", "create", json.dumps(data))
+        if not response:
+            return
+        if response['code'] == 0:
+            print("[Biolab] The config " + type + "_" + key + " registered successful")
         else:
-            print("[Biolab] The config ["+type+"_"+ key+"] registered successful !")
+            print("[Biolab] The config " + type + "_" + key + " already registered")
 
 
 def list_config():
     if check():
         data = {};
-        configs = post("config", "list", json.dumps(data))
-        for config in configs:
+        response = post("config", "list", json.dumps(data))
+        if not response:
+            return
+        if not response['data']:
+            print("No system configs configured")
+            return
+        for config in response['data']:
             print(config)
