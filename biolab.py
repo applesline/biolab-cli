@@ -40,8 +40,10 @@ def config():
 @cli.command()
 @click.option('--server', required=True, default='http://localhost', help='server http address, eg: http://biolab.com')
 @click.option('--port', required=True, default='8080', help='server port, eg 8080')
-def local(server,port):
-    set_config(server, port)
+@click.option('--token', required=True, default='', help='-')
+
+def local(server,port,token):
+    set_config(server, port, token)
 
 
 @workflow.command()

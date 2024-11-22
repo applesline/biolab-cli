@@ -36,7 +36,6 @@ def create_file(basedir):
 
 def list_file(uniqueno):
     if check():
-        # print(list(unique_no))
         response = post("fileIndex", "list", json.dumps(uniqueno))
         if not response:
             return

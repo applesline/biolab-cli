@@ -1,10 +1,11 @@
 import os
 import json
 
-def set_config(server,port):
+def set_config(server,port,token):
     config = {
         "server": server,
-        "port": port
+        "port": port,
+        "token": token
     }
     home_dir = os.path.expanduser('~')
     config_path = os.path.join(home_dir, '.biolab_config');
@@ -29,6 +30,6 @@ def check():
     if len(config) == 0:
         return False;
     if "server" not in config or "port" not in config:
-        print("[Biolab] 'server' and 'port' must be configured, use config command first")
+        print("[Biolab] 'server','port' and 'token' must be configured, use config command first")
         return False;
     return True;
