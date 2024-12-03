@@ -1,4 +1,5 @@
 import requests
+import os
 import sys
 from config import load_config
 
@@ -49,5 +50,7 @@ def post(module, method, data):
             resp['data'] = [""]
         return resp
     except Exception as e:
-        print("Can't communicate with server, maybe token is invalid, please check your local config and the url " + url)
+        home_dir = os.path.expanduser('~')
+        config_path = os.path.join(home_dir, '.biolab_config');
+        print("Can't communicate with server, maybe token is invalid, please check your local config " + config_path)
 
